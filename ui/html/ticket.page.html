@@ -1,0 +1,37 @@
+{{define "page-title"}}Ticket{{end}}
+{{define "page-body"}}
+      {{with .Attendee}}
+      <div class="row" style="margin:20px;">
+            <div class="col-md-12 text-center">
+                  <img src="https://chart.googleapis.com/chart?cht=qr&amp;chl={{.TicketCode}}&amp;chs=200x200&amp;chld=L|2">
+                  <div class="text-center"><h5>{{.TicketCode}}</h5></div>
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">Bib No.</label>
+            <div class="col-sm-8">
+                        {{.BibNo}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">Name</label>
+            <div class="col-sm-8">
+                        {{.Firstname}} {{.Lastname}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">Event</label>
+            <div class="col-sm-8">
+                  {{.EventTitle}}
+            </div>
+      </div>
+      {{range $key, $value := $.FormFields}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$value.Name}}]" class="col-sm-4 col-form-label font-weight-bold">{{$value.Title}}</label>
+                  <div class="col-sm-8">
+                        {{index $.Attendee.CustomFields $value.Name}}
+                  </div>
+            </div>
+      {{end}}
+  {{end}}
+{{end}}

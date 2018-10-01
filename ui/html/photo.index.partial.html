@@ -1,0 +1,19 @@
+{{define "photo-index-partial"}}
+<div class="row">
+      {{if .Photos}}
+      {{template "pagination-partial" .}}
+      {{range .Photos}}
+      <div class="col-6">
+            <img class="img-fluid" src="{{.FilePath}}" >
+            <div>
+                  <h5>No. {{.RunningNumber}}</h5>
+                  {{humanDate .Created}} {{if .Location}} / {{.Location}}{{end}}
+            </div>
+      </div>
+      {{end}}
+      {{template "pagination-partial" .}}
+      {{else}}
+      <p>There's nothing to see here yet!</p>
+      {{end}}
+</div>
+{{end}}

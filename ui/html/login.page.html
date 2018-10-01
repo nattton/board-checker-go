@@ -1,0 +1,25 @@
+{{define "page-title"}}Login{{end}} 
+{{define "page-body"}}
+      <form action="/user/login" method="POST" novalidate>
+      {{with .Form}}
+      <div class="form-group">
+            {{with .Failures.Generic}}
+            <div class="alert alert-danger" role="alert">{{.}}</div>
+            {{end}}
+            {{with .Failures.Username}}
+            <div class="alert alert-danger" role="alert">{{.}}</div>
+            {{end}}
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+      </div>
+      <div class="form-group">
+            {{with .Failures.Password}}
+            <div class="alert alert-danger" role="alert">{{.}}</div>
+            {{end}}
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+      {{end}}
+      </form>
+{{end}}

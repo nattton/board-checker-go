@@ -1,0 +1,24 @@
+{{define "page-title"}}Project No. {{.Project.ID}} - {{.Project.Name}}{{end}}
+{{define "page-body"}}
+{{template "project-navbar" .}}
+
+{{with .Project}}
+<div class="row">
+      <div class="col-sm-9">
+            <h2>{{.Name}}</h2>
+      </div>
+      <div class="col-sm-1">
+            <a class="btn btn-success" href="/project/{{.ID}}/edit">Edit</a>
+      </div>
+      <div class="col-sm-2">
+            <a class="btn btn-success" href="/project/{{.ID}}/photo/new">New Photo</a>
+      </div>
+</div>
+<div class="row">
+      <div class="col-sm-6"><img src="https://chart.googleapis.com/chart?cht=qr&amp;chl={{.ID}}&amp;chs=200x200" ></div>
+</div>
+{{end}}
+
+{{template "photo-index-partial" .}}
+
+{{end}}

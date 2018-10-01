@@ -1,0 +1,50 @@
+{{define "page-title"}}Attendee #{{.Attendee.ID}}{{end}} 
+{{define "page-body"}}
+{{template "event-navbar" .}}
+      {{with .Attendee}}
+            <div class="row">
+                  <h2>Event - {{.EventTitle}}</h2>
+            </div>
+            <form action="/attendee/{{.ID}}/edit" method="POST">
+                  <div class="form-group row">
+                        <label for="ticket_type_id" class="col-sm-4 col-form-label">Ticket Type</label>
+                        <div class="col-sm-8">
+                              <select  class="form-control" id="ticket_type_id" name="ticket_type_id">
+                              {{range $key, $value := $.TicketTypes}}
+                                    {{if eq $value.ID $.Attendee.TicketTypeID }}
+                                    <option value="{{$value.ID}}" selected>{{$value.Title}}</option>
+                                    {{end}}
+                                    {{if ne $value.ID $.Attendee.TicketTypeID }}
+                                    <option value="{{$value.ID}}">{{$value.Title}}</option>
+                                    {{end}}
+                              {{end}}
+                              </select>
+                        </div>
+                  </div>
+                  <div class="form-group row">
+                        <label for="firstname" class="col-sm-4 col-form-label">Firstname</label>
+                        <div class="col-sm-8">
+                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{.Firstname}}">
+                        </div>
+                  </div>
+                  <div class="form-group row">
+                        <label for="lastname" class="col-sm-4 col-form-label">Lastname</label>
+                        <div class="col-sm-8">
+                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{.Lastname}}">
+                        </div>
+                  </div>
+                  {{range $key, $value := $.FormFields}}
+                  <div class="form-group row">
+                        <label for="custom_fields_{{$value.Name}}" class="col-sm-4 col-form-label">{{$value.Title}}</label>
+                        <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields_{{$value.Name}}" name="custom_fields[{{$value.Name}}]" value="{{index $.Attendee.CustomFields $value.Name}}">
+                        </div>
+                  </div>
+                  {{end}}
+                  <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class=".col-sm-8"><button class="btn btn-primary">Save</button></div>
+                  </div>
+            </form>
+      {{end}}
+{{end}}

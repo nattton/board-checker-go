@@ -1,0 +1,15 @@
+{{define "page-title"}}{{.Title}}{{end}}
+{{define "page-body"}}
+{{template "event-navbar" .}}
+<div class="row justify-content-between">
+      <div>
+            <h2>Attendees {{with .Event}}/ <a href="/event/{{.ID}}/attendees/download">Download Attendees</a>{{end}}</h2>
+            {{with .Event}}
+            <form action="/event/{{.ID}}/attendees" method="GET">
+                  <input type="text" name="q" /> <button class="btn btn-primary">Search</button>
+            </form>
+            {{end}}
+      </div>
+</div>
+{{- template "attendee-index-partial" . -}}
+{{end}}

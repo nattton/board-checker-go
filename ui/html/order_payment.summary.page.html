@@ -1,0 +1,37 @@
+{{define "page-title"}}{{.Title}}{{end}}
+{{define "page-body"}}
+{{template "event-navbar" .}}
+{{with .Event}}
+<div class="row">
+      <h2>Summary / <a href="/event/{{.ID}}/order_payments/download">Download Order payments</a></h2>
+</div>
+{{end}}
+<div class="row">
+      {{if .OrderPayments}}
+      <table class="table table-responsive">
+            <thead>
+                  <th>Payment Date</th>
+                  <th>Order Total</th>
+                  <th>Credit Card Fee</th>
+                  <th>Vat Fee</th>
+                  <th>TaxFee</th>
+                  <th>AfterVat</th>
+                  <th>AfterFee</th>
+            </thead>
+            {{range .OrderPayments}}
+            <tr>
+                  <td><a href="/event/{{$.Event.ID}}/order_payments?date={{.PaymentDate}}">{{.PaymentDate}}</a></td>
+                  <td>{{humanNumber .OrderTotal}}</td>
+                  <td>{{humanNumber .OrderCreditCardFee}}</td>
+                  <td>{{humanNumber .OrderVatFee}}</td>
+                  <td>{{humanNumber .OrderTaxFee}}</td>
+                  <td>{{humanNumber .OrderAfterVat}}</td>
+                  <td>{{humanNumber .OrderAfterFee}}</td>
+            </tr>
+            {{end}}
+      </table>
+      {{else}}
+      <p>There's nothing to see here yet!</p>
+      {{end}}
+</div>
+{{end}}

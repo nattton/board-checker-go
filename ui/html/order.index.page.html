@@ -1,0 +1,50 @@
+{{define "page-title"}}{{.Title}}{{end}}
+{{define "page-body"}}
+{{if .Event}}
+{{- template "event-navbar" . -}}
+<div class="row justify-content-between">
+      <h2>Orders / <a href="/event/{{.Event.ID}}/orders/download">Download Orders</a></h2>
+      <form action="/event/{{.Event.ID}}/orders" method="GET">
+            <input type="text" name="q" /> <button>Search</button>
+      </form>
+</div>
+{{else}}
+<div class="row justify-content-between">
+      <form action="/admin/orders" method="GET">
+            <input type="text" name="q" /> <button>Search</button>
+      </form>
+</div>
+{{end}}
+<div class="row">
+      {{if .Orders}}
+      {{template "pagination-partial" .}}
+      <table class="table table-responsive">
+            <thead>
+                  <th>OrderID</th>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Order Total</th>
+                  <th>Payment Method</th>
+                  <th>Order Date</th>
+                  <th>Payment Date</th>
+                  <th>Edit</th>
+            </thead>
+            {{range .Orders}}
+            <tr>
+                  <td><a href="/order/{{.ID}}">{{.ID}}</a></td>
+                  <td>{{.Firstname}}</td>
+                  <td>{{.Lastname}}</td>
+                  <td>{{.OrderTotal}}</td>
+                  <td>{{.PaymentMethod}}</td>
+                  <td>{{timeString .OrderDateTime}}</td>
+                  <td>{{timeString .PaymentDateTime}}</td>
+                  <td><a href="https://www.bookzy.co.th/wp-admin/post.php?post={{.ID}}&amp;action=edit">Edit</a></td>
+            </tr>
+            {{end}}
+      </table>
+      {{template "pagination-partial" .}}
+      {{else}}
+      <p>There's nothing to see here yet!</p>
+      {{end}}
+</div>
+{{end}}

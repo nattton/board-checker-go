@@ -1,0 +1,35 @@
+{{define "page-title"}}{{.Title}}{{end}}
+{{define "page-body"}}
+{{template "event-navbar" .}}
+{{with .Event}}
+<div>
+      <h2><a href="/event/{{.ID}}/order_payments/summary">Summary</a> / <a href="/event/{{.ID}}/order_payments/download">Download Order payments</a></h2>
+</div>
+{{end}}
+<div class="row">
+      {{if .OrderPayments}}
+      {{template "pagination-partial" .}}
+      <table class="table table-responsive">
+            <thead>
+                  <th>OrderID</th>
+                  <th>Payment Date Time</th>
+                  <th>Order Total</th>
+                  <th>Payment Amount</th>
+                  <th>Payment Type</th>
+            </thead>
+            {{range .OrderPayments}}
+            <tr>
+                  <td><a href="/order/{{.OrderID}}">{{.OrderID}}</a></td>
+                  <td>{{timeString .PaymentDateTime}}</td>
+                  <td>{{.OrderTotal}}</td>
+                  <td>{{.PaymentAmount}}</td>
+                  <td>{{.PaymentType}}</td>
+            </tr>
+            {{end}}
+      </table>
+      {{template "pagination-partial" .}}
+      {{else}}
+      <p>There's nothing to see here yet!</p>
+      {{end}}
+</div>
+{{end}}

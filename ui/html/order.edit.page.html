@@ -1,0 +1,191 @@
+{{define "page-title"}}Order #{{.Order.ID}}{{end}} 
+{{define "page-body"}}
+      {{template "payment-status" .}}
+      {{with .Order}}
+            <div class="row">
+                  <h2>Order #{{.ID}}</h2>
+                  <form class="dropdown-item" action="/order/{{.ID}}/resend" method="POST">
+                        <button class="btn btn-warning">Re-Send Bib No.</button>
+                    </form>
+            </div>
+            {{$fieldKey := "_order_total"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        {{index .CustomFields $fieldKey}}
+                  </div>
+            </div>
+            {{$fieldKey := "_paid_date"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        {{index .CustomFields $fieldKey}}
+                  </div>
+            </div>
+            {{$fieldKey := "_order_key"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        {{index .CustomFields $fieldKey}}
+                  </div>
+            </div>
+            {{$fieldKey := "_payment_method"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        {{index .CustomFields $fieldKey}}
+                  </div>
+            </div>
+
+            <p class="font-weight-bold">Billing details</p>
+
+            {{$fieldKey := "_billing_first_name"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+
+            {{$fieldKey := "_billing_last_name"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+
+            {{$fieldKey := "_billing_phone"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_email"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+
+            {{$fieldKey := "_billing_company"}}
+            <div class="form-group row">
+                        <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                        <div class="col-sm-8">
+                              <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                        </div>
+                  </div>
+            {{$fieldKey := "_billing_address_1"}}
+             <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_address_2"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_address_2"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_city"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_postcode"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_billing_country"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            
+            <p class="font-weight-bold">Shipping details</p>
+
+            {{$fieldKey := "_shipping_first_name"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+
+            {{$fieldKey := "_shipping_last_name"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+
+            {{$fieldKey := "_shipping_company"}}
+            <div class="form-group row">
+                        <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                        <div class="col-sm-8">
+                              <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                        </div>
+                  </div>
+            {{$fieldKey := "_shipping_address_1"}}
+             <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_shipping_address_2"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_shipping_address_2"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_shipping_city"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_shipping_postcode"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+            {{$fieldKey := "_shipping_country"}}
+            <div class="form-group row">
+                  <label for="custom_fields[{{$fieldKey}}]" class="col-sm-4 col-form-label font-weight-bold">{{$fieldKey}}</label>
+                  <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custom_fields[{{$fieldKey}}]" name="custom_fields[{{$fieldKey}}]" value="{{index .CustomFields $fieldKey}}">
+                  </div>
+            </div>
+      {{end}}
+{{end}}

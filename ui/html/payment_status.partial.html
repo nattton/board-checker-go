@@ -1,0 +1,55 @@
+{{define "payment-status"}}
+      {{with .PaymentStatus}}
+      <div class="row">
+            <h2>Payment Status</h2>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">RefID</label>
+            <div class="col-sm-8">
+                  {{.RefID}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">PaymentCode</label>
+            <div class="col-sm-8">
+                  {{.PaymentCode}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">PaymentMessage</label>
+            <div class="col-sm-8">
+                  {{.PaymentMessage}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">PaymentType</label>
+            <div class="col-sm-8">
+                  {{.PaymentType}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">PaymentAmount</label>
+            <div class="col-sm-8">
+                  {{.PaymentAmount}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">TransDesc</label>
+            <div class="col-sm-8">
+                  {{.TransDesc}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">PaymentDateTime</label>
+            <div class="col-sm-8">
+                  {{.PaymentDateTime}}
+            </div>
+      </div>
+      <div class="form-group row">
+            <label class="col-sm-4 col-form-label font-weight-bold">OrderNo</label>
+            <div class="col-sm-8">
+                  {{.OrderNo}}
+            </div>
+      </div>
+      {{end}}
+{{end}}

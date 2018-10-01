@@ -1,0 +1,42 @@
+{{define "page-title"}}Attendee #{{.Attendee.ID}}{{end}} 
+{{define "page-body"}}
+{{template "event-navbar" .}}
+      {{with .Attendee}}
+            <div class="form-group row">
+                  <label for="ticket_type_id" class="col-sm-4 col-form-label font-weight-bold">Ticket Type</label>
+                  <div class="col-sm-8">
+                        {{.TicketTypeTitle}}
+                  </div>
+            </div>
+            <div class="form-group row">
+                  <label for="bib_no" class="col-sm-4 col-form-label font-weight-bold">Bib No.</label>
+                  <div class="col-sm-8">
+                        {{.BibNo}}
+                  </div>
+            </div>
+            <div class="form-group row">
+                  <label for="firstname" class="col-sm-4 col-form-label font-weight-bold">Firstname</label>
+                  <div class="col-sm-8">
+                        {{.Firstname}}
+                  </div>
+            </div>
+            <div class="form-group row">
+                  <label for="lastname" class="col-sm-4 col-form-label font-weight-bold">Lastname</label>
+                  <div class="col-sm-8">
+                        {{.Lastname}}
+                  </div>
+            </div>
+            {{range $key, $value := $.FormFields}}
+            <div class="form-group row">
+                  <label for="custom_fields_{{$value.Name}}" class="col-sm-4 col-form-label font-weight-bold">{{$value.Title}}</label>
+                  <div class="col-sm-8">
+                        {{index $.Attendee.CustomFields $value.Name}}
+                  </div>
+            </div>
+            {{end}}
+            <div class="row">
+                  <div class="col-sm-4"></div>
+                  <div class=".col-sm-8"><a class="btn btn-success" href="/attendee/{{.ID}}/edit">Edit</a></div>
+            </div>
+      {{end}}
+{{end}}

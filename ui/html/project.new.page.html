@@ -1,0 +1,32 @@
+{{define "page-title"}}New Project{{end}}
+{{define "page-body"}}
+{{template "project-navbar" .}}
+<div class="clearfix"></div>
+      <form action="/project/new" method="POST">
+      <div class="row">
+            <div class="col-sm-9"><h2>New Project</h2></div>
+      </div>
+      <div class="row">
+            <label for="project_id" class="col-md-3 col-form-label">Project ID.</label>
+            <div class="col-md-9">
+            <input type="text" class="form-control" id="project_id" name="project_id" value="">
+            </div>
+      </div>
+      <div class="row">
+            <label for="project_name" class="col-md-3 col-form-label">Project Name</label>
+            <div class="col-md-9">
+            <input type="text" class="form-control" id="project_name" name="project_name" value="">
+            </div>
+      </div>
+      <div class="row">
+            <label for="uploadFile" class="col-md-3 col-form-label">Photo</label>
+            <div class="col-md-9">
+            <input type="file" name="uploadFile" >
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-4"></div>
+            <div class=".col-sm-8"><button class="btn btn-primary">Save</button></div>
+      </div>
+      </form>
+{{end}}
