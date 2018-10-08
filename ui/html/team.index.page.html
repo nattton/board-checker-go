@@ -1,0 +1,23 @@
+{{define "page-title"}}{{.Title}}{{end}}
+{{define "page-body"}}
+<div class="row">
+      {{if .Teams}}
+      <table class="table table-responsive">
+            <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Edit</th>
+            </thead>
+            {{range .Teams}}
+            <tr>
+                  <td>{{.ID}}</td>
+                  <td>{{.Name}}</td>
+                  <td><a href="/team/{{.ID}}/edit">Edit</a></td>
+            </tr>
+            {{end}}
+      </table>
+      {{else}}
+      <p>There's nothing to see here yet!</p>
+      {{end}}
+</div>
+{{end}}

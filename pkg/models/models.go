@@ -13,6 +13,13 @@ type Worksheet struct {
 
 type Worksheets []*Worksheet
 
+type Team struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type Teams []*Team
+
 type Photo struct {
 	ID            int
 	WorksheetID   int
