@@ -1,0 +1,22 @@
+{{define "page-title"}}Worksheet - {{.Worksheet.Name}}{{end}}
+{{define "page-body"}}
+{{template "worksheet-navbar" .}}
+<div class="clearfix"></div>
+      {{with .Worksheet}}
+      <form action="/worksheet/{{.ID}}/edit" method="POST">
+      <div class="row">
+            <div class="col-sm-9"><h2>Worksheet No. {{.ID}} - {{.Name}}</h2></div>
+      </div>
+      <div class="row">
+            <label for="worksheet_name" class="col-md-3 col-form-label">Worksheet Name</label>
+            <div class="col-md-9">
+            <input type="text" class="form-control" id="worksheet_name" name="worksheet_name" value="{{.Name}}">
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-4"></div>
+            <div class=".col-sm-8"><button class="btn btn-primary">Save</button></div>
+      </div>
+      </form>
+      {{end}}
+{{end}}

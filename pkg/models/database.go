@@ -20,7 +20,7 @@ func (db *Database) CreateTable() error {
 		return err
 	}
 
-	_, err = db.Exec(`CREATE TABLE projects (
+	_, err = db.Exec(`CREATE TABLE worksheets (
 		id int(11) NOT NULL,
 		name varchar(255) NOT NULL,
 		created datetime NOT NULL,
@@ -33,7 +33,7 @@ func (db *Database) CreateTable() error {
 
 	_, err = db.Exec(`CREATE TABLE photos (
 		id int(11) NOT NULL AUTO_INCREMENT,
-		project_id int(11) NOT NULL,
+		worksheet_id int(11) NOT NULL,
 		running_number int(5) NOT NULL,
 		filename varchar(255) NOT NULL,
 		created datetime NOT NULL,

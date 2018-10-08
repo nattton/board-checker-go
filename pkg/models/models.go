@@ -5,25 +5,17 @@ import (
 	"time"
 )
 
-type Project struct {
-	ID       int       `json:"id"`
-	Name     string    `json:"name"`
-	FileName string    `json:"-"`
-	Created  time.Time `json:"created"`
+type Worksheet struct {
+	ID      int       `json:"id"`
+	Name    string    `json:"name"`
+	Created time.Time `json:"created"`
 }
 
-func (p *Project) FilePath() string {
-	if p.FileName == "" {
-		return "/static/img/project_placeholder.png"
-	}
-	return "/store/" + strconv.Itoa(p.ID) + "/" + p.FileName
-}
-
-type Projects []*Project
+type Worksheets []*Worksheet
 
 type Photo struct {
 	ID            int
-	ProjectID     int
+	WorksheetID   int
 	RunningNumber int
 	FileName      string
 	Location      string
@@ -33,7 +25,7 @@ type Photo struct {
 type Photos []*Photo
 
 func (f *Photo) FilePath() string {
-	return "/store/" + strconv.Itoa(f.ProjectID) + "/" + f.FileName
+	return "/store/" + strconv.Itoa(f.WorksheetID) + "/" + f.FileName
 }
 
 type FormField struct {

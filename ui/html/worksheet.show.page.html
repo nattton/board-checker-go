@@ -1,17 +1,17 @@
-{{define "page-title"}}Project No. {{.Project.ID}} - {{.Project.Name}}{{end}}
+{{define "page-title"}}Worksheet No. {{.Worksheet.ID}} - {{.Worksheet.Name}}{{end}}
 {{define "page-body"}}
-{{template "project-navbar" .}}
+{{template "worksheet-navbar" .}}
 
-{{with .Project}}
+{{with .Worksheet}}
 <div class="row">
       <div class="col-sm-9">
             <h2>{{.Name}}</h2>
       </div>
       <div class="col-sm-1">
-            <a class="btn btn-success" href="/project/{{.ID}}/edit">Edit</a>
+            <a class="btn btn-success" href="/worksheet/{{.ID}}/edit">Edit</a>
       </div>
       <div class="col-sm-2">
-            <a class="btn btn-success" href="/project/{{.ID}}/photo/new">New Photo</a>
+            <a class="btn btn-success" href="/worksheet/{{.ID}}/photo/new">New Photo</a>
       </div>
 </div>
 <div class="row">

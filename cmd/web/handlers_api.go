@@ -81,28 +81,27 @@ func (app *App) APIUserLogin(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-type JSONProjects struct {
-	models.Projects
+type JSONWorksheets struct {
+	models.Worksheets
 	Host string
 }
 
-func (j JSONProjects) MarshalJSON() ([]byte, error) {
-	type Project struct {
+func (j JSONWorksheets) MarshalJSON() ([]byte, error) {
+	type Worksheet struct {
 		ID      int    `json:"id"`
 		Name    string `json:"name"`
 		FileURL string `json:"fileURL"`
 		Created string `json:"created"`
 	}
-	projects := make([]Project, len(j.Projects))
-	for i, v := range j.Projects {
-		projects[i] = Project{
+	worksheets := make([]Worksheet, len(j.Worksheets))
+	for i, v := range j.Worksheets {
+		worksheets[i] = Worksheet{
 			ID:      v.ID,
 			Name:    v.Name,
-			FileURL: j.Host + v.FilePath(),
 			Created: v.Created.Format(time.RFC3339),
 		}
 	}
-	return json.Marshal(projects)
+	return json.Marshal(worksheets)
 }
 
 type JSONPhotos struct {
@@ -129,11 +128,11 @@ func (j JSONPhotos) MarshalJSON() ([]byte, error) {
 	return json.Marshal(photos)
 }
 
-func (app *App) APIListProjects(w http.ResponseWriter, r *http.Request) {
+func (app *App) APIListWorksheets(w http.ResponseWriter, r *http.Request) {
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
 	log.Printf("Test")
-	projects, err := db.ListProjects()
+	worksheets, err := db.ListWorksheets()
 	if err == sql.ErrNoRows {
 		app.APINotFound(w, r)
 		return
@@ -143,7 +142,7 @@ func (app *App) APIListProjects(w http.ResponseWriter, r *http.Request) {
 	}
 
 	b, err := json.Marshal(map[string]interface{}{
-		"projects": JSONProjects{projects, "http://" + r.Host},
+		"worksheets": JSONWorksheets{worksheets, "http://" + r.Host},
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -155,13 +154,13 @@ func (app *App) APIListProjects(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func (app *App) APIShowProject(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+func (app *App) APIShowWorksheet(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err == sql.ErrNoRows {
 		app.APINotFound(w, r)
 		return
@@ -178,7 +177,7 @@ func (app *App) APIShowProject(w http.ResponseWriter, r *http.Request) {
 		query.MaxResults = maxResults
 	}
 
-	photos, err := db.ListPhotos(project.ID, query)
+	photos, err := db.ListPhotos(worksheet.ID, query)
 	if err != nil {
 		app.ServerError(w, err)
 		return
@@ -186,8 +185,8 @@ func (app *App) APIShowProject(w http.ResponseWriter, r *http.Request) {
 
 	p := JSONPhotos{photos, "http://" + r.Host}
 	b, err := json.Marshal(map[string]interface{}{
-		"project": project,
-		"photos":  p,
+		"worksheet": worksheet,
+		"photos":    p,
 	})
 
 	if err != nil {
@@ -201,17 +200,17 @@ func (app *App) APIShowProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) APIInsertPhoto(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
-	if project == nil {
+	if worksheet == nil {
 		app.NotFound(w, r)
 		return
 	}
@@ -232,7 +231,7 @@ func (app *App) APIInsertPhoto(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("%v", handler.Header)
 
-	fileDir := app.StoreDir + "/" + strconv.Itoa(project.ID)
+	fileDir := app.StoreDir + "/" + strconv.Itoa(worksheet.ID)
 	os.MkdirAll(fileDir, os.ModePerm)
 	f, err := os.OpenFile(fileDir+"/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
@@ -243,7 +242,7 @@ func (app *App) APIInsertPhoto(w http.ResponseWriter, r *http.Request) {
 	io.Copy(f, uploadFile)
 
 	photo := &models.Photo{
-		ProjectID:     project.ID,
+		WorksheetID:   worksheet.ID,
 		RunningNumber: runningNumber,
 		FileName:      handler.Filename,
 	}

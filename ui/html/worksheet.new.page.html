@@ -1,21 +1,21 @@
-{{define "page-title"}}New Project{{end}}
+{{define "page-title"}}New Worksheet{{end}}
 {{define "page-body"}}
-{{template "project-navbar" .}}
+{{template "worksheet-navbar" .}}
 <div class="clearfix"></div>
-      <form action="/project/new" method="POST">
+      <form action="/worksheet/new" method="POST">
       <div class="row">
-            <div class="col-sm-9"><h2>New Project</h2></div>
+            <div class="col-sm-9"><h2>New Worksheet</h2></div>
       </div>
       <div class="row">
-            <label for="project_id" class="col-md-3 col-form-label">Project ID.</label>
+            <label for="worksheet_id" class="col-md-3 col-form-label">Worksheet ID.</label>
             <div class="col-md-9">
-            <input type="text" class="form-control" id="project_id" name="project_id" value="">
+            <input type="text" class="form-control" id="worksheet_id" name="worksheet_id" value="">
             </div>
       </div>
       <div class="row">
-            <label for="project_name" class="col-md-3 col-form-label">Project Name</label>
+            <label for="worksheet_name" class="col-md-3 col-form-label">Worksheet Name</label>
             <div class="col-md-9">
-            <input type="text" class="form-control" id="project_name" name="project_name" value="">
+            <input type="text" class="form-control" id="worksheet_name" name="worksheet_name" value="">
             </div>
       </div>
       <div class="row">

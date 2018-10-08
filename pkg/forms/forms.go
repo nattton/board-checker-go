@@ -31,9 +31,9 @@ func NewQuery() *Query {
 	return &Query{MaxResults: 100}
 }
 
-type Project struct {
-	ID   int    `form:"project_id"`
-	Name string `form:"project_name"`
+type Worksheet struct {
+	ID   int    `form:"worksheet_id"`
+	Name string `form:"worksheet_name"`
 }
 
 type File struct {

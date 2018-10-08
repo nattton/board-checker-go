@@ -1,32 +1,31 @@
-# bkzy-organizer
+# Board Checker
 
-Board Checker
+## Build
 
-# Build
-	./build/build.sh 
+    ./build/build.sh
 
-# Start Web
+## Start Web
 
-	./bin/web
+    ./bin/web
 
-## Usage of web:
+## Usage of web
 
-  -addr string
+-addr string
+
+    HTTP Network Address (default ":4000")
+
+-dsn string
+
+    Database DSN (default "$BC_DSN")
+
+-html-dir string
   
-	HTTP Network Address (default ":4000")
+    Path to static assets (default "$GOPATH/src/gitlab.com/code-mobi/board-checker/ui/html")
 
-  -dsn string
+-secret string
   
-	Database DSN (default "$BC_DSN")
+    Secret key
+
+-static-dir string
   
-  -html-dir string
-  
-	Path to static assets (default "$GOPATH/src/gitlab.com/code-mobi/board-checker/ui/html")
-    	
-  -secret string
-  
-	Secret key
-    	
-  -static-dir string
-  
-	Path to static assets (default "$GOPATH/src/gitlab.com/code-mobi/board-checker/ui/static")
+    Path to static assets (default "$GOPATH/src/gitlab.com/code-mobi/board-checker/ui/static")

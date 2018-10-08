@@ -1,12 +1,12 @@
 {{define "page-title"}}Home{{end}}
 {{define "page-body"}}
-{{if .Projects}}
+{{if .Worksheets}}
 <div class="row">
 <div class="col-sm-10">
-      <h2>Projects</h2>
+      <h2>Worksheets</h2>
 </div>
 <div class="col-sm-2">
-      <a class="btn btn-success" href="/project/new">New Project</a>
+      <a class="btn btn-success" href="/worksheet/new">New Worksheet</a>
 </div>
 </div>
   <div class="row">
@@ -16,10 +16,10 @@
                 <th>Name</th>
                 <th>Date</th>
           </thead>
-          {{range .Projects}}
+          {{range .Worksheets}}
           <tr>
                 <td>
-                      <a href="/project/{{.ID}}">{{.ID}}</a>
+                      <a href="/worksheet/{{.ID}}">{{.ID}}</a>
                 </td>
                 <td>{{.Name}}</td>
                 <td>{{humanDate .Created}}</td>

@@ -1,11 +1,11 @@
-{{define "page-title"}}Project - {{.Project.Name}}{{end}}
+{{define "page-title"}}Worksheet - {{.Worksheet.Name}}{{end}}
 {{define "page-body"}}
-{{template "project-navbar" .}}
+{{template "worksheet-navbar" .}}
 <div class="clearfix"></div>
-      {{with .Project}}
-      <form enctype="multipart/form-data" action="/project/{{.ID}}/photo/new" method="POST">
+      {{with .Worksheet}}
+      <form enctype="multipart/form-data" action="/worksheet/{{.ID}}/photo/new" method="POST">
       <div class="row">
-            <div class="col-sm-9"><h2>Project No. {{.ID}} - {{.Name}}</h2></div>
+            <div class="col-sm-9"><h2>Worksheet No. {{.ID}} - {{.Name}}</h2></div>
       </div>
       <div class="row">
             <label for="uploadFile" class="col-md-3 col-form-label">Photo</label>

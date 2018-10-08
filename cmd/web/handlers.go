@@ -17,7 +17,7 @@ func (app *App) Home(w http.ResponseWriter, r *http.Request) {
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
 
-	projects, err := db.ListProjects()
+	worksheets, err := db.ListWorksheets()
 	if err != nil {
 		app.ServerError(w, err)
 		return
@@ -32,7 +32,7 @@ func (app *App) Home(w http.ResponseWriter, r *http.Request) {
 
 	app.RenderHTML(w, r, []string{"home.page.html"}, &HTMLData{
 		Flash:    flash,
-		Projects: projects,
+		Worksheets: worksheets,
 	})
 }
 
@@ -101,8 +101,8 @@ func (app *App) LogoutUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func (app *App) ShowProject(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+func (app *App) ShowWorksheet(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -113,12 +113,12 @@ func (app *App) ShowProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
-	if project == nil {
+	if worksheet == nil {
 		app.NotFound(w, r)
 		return
 	}
@@ -131,20 +131,20 @@ func (app *App) ShowProject(w http.ResponseWriter, r *http.Request) {
 		query.MaxResults = maxResults
 	}
 
-	photos, err := db.ListPhotos(project.ID, query)
+	photos, err := db.ListPhotos(worksheet.ID, query)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
 
-	app.RenderHTML(w, r, []string{"project.show.page.html", "project.navbar.html", "photo.index.partial.html", "pagination.partial.html"}, &HTMLData{
-		Project: project,
+	app.RenderHTML(w, r, []string{"worksheet.show.page.html", "worksheet.navbar.html", "photo.index.partial.html", "pagination.partial.html"}, &HTMLData{
+		Worksheet: worksheet,
 		Photos:  photos,
 	})
 }
 
-func (app *App) EditProject(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+func (app *App) EditWorksheet(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -155,28 +155,28 @@ func (app *App) EditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if projectID == 0 {
-		app.RenderHTML(w, r, []string{"project.new.page.html", "project.navbar.html"}, &HTMLData{})
+	if worksheetID == 0 {
+		app.RenderHTML(w, r, []string{"worksheet.new.page.html", "worksheet.navbar.html"}, &HTMLData{})
 		return
 	}
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
-	if project == nil {
+	if worksheet == nil {
 		app.NotFound(w, r)
 		return
 	}
 
-	app.RenderHTML(w, r, []string{"project.edit.page.html", "project.navbar.html"}, &HTMLData{
-		Project: project,
+	app.RenderHTML(w, r, []string{"worksheet.edit.page.html", "worksheet.navbar.html"}, &HTMLData{
+		Worksheet: worksheet,
 	})
 }
 
-func (app *App) SaveProject(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+func (app *App) SaveWorksheet(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -194,36 +194,36 @@ func (app *App) SaveProject(w http.ResponseWriter, r *http.Request) {
 
 	decoder := form.NewDecoder()
 
-	var f forms.Project
+	var f forms.Worksheet
 	err := decoder.Decode(&f, r.PostForm)
 	if err != nil {
 		app.ClientError(w, http.StatusBadRequest)
 		return
 	}
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
 
-	if project == nil {
-		project = &models.Project{
+	if worksheet == nil {
+		worksheet = &models.Worksheet{
 			ID:   f.ID,
 			Name: f.Name,
 		}
-		err = db.InsertProject(project)
+		err = db.InsertWorksheet(worksheet)
 		if err != nil {
 			app.ServerError(w, err)
 			return
 		}
 
 	} else {
-		project = &models.Project{
-			ID:   projectID,
+		worksheet = &models.Worksheet{
+			ID:   worksheetID,
 			Name: f.Name,
 		}
-		err = db.UpdateProject(project)
+		err = db.UpdateWorksheet(worksheet)
 		if err != nil {
 			app.ServerError(w, err)
 			return
@@ -231,18 +231,18 @@ func (app *App) SaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := app.Sessions.Load(r)
-	err = session.PutString(w, "flash", "Project was saved successfully!")
+	err = session.PutString(w, "flash", "Worksheet was saved successfully!")
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
 
-	http.Redirect(w, r, "/project/"+strconv.Itoa(project.ID), http.StatusSeeOther)
+	http.Redirect(w, r, "/worksheet/"+strconv.Itoa(worksheet.ID), http.StatusSeeOther)
 
 }
 
 func (app *App) NewPhoto(w http.ResponseWriter, r *http.Request) {
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -253,24 +253,24 @@ func (app *App) NewPhoto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
-	if project == nil {
+	if worksheet == nil {
 		app.NotFound(w, r)
 		return
 	}
 
-	app.RenderHTML(w, r, []string{"photo.new.page.html", "project.navbar.html"}, &HTMLData{
-		Project: project,
+	app.RenderHTML(w, r, []string{"photo.new.page.html", "worksheet.navbar.html"}, &HTMLData{
+		Worksheet: worksheet,
 	})
 }
 
 func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 	session := app.Sessions.Load(r)
-	projectID, _ := strconv.Atoi(mux.Vars(r)["project_id"])
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -281,12 +281,12 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, err := db.GetProject(projectID)
+	worksheet, err := db.GetWorksheet(worksheetID)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
-	if project == nil {
+	if worksheet == nil {
 		app.NotFound(w, r)
 		return
 	}
@@ -307,7 +307,7 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("%v", handler.Header)
 	if handler.Filename != "" {
-		f, err := os.OpenFile(app.StoreDir+"/"+strconv.Itoa(project.ID)+"/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+		f, err := os.OpenFile(app.StoreDir+"/"+strconv.Itoa(worksheet.ID)+"/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			app.ServerError(w, err)
 			return
@@ -325,14 +325,14 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		app.RenderHTML(w, r, []string{"photo.new.page.html", "project.navbar.html"}, &HTMLData{
-			Project: project,
+		app.RenderHTML(w, r, []string{"photo.new.page.html", "worksheet.navbar.html"}, &HTMLData{
+			Worksheet: worksheet,
 		})
 		return
 	}
 
 	photo := &models.Photo{
-		ProjectID:     project.ID,
+		WorksheetID:     worksheet.ID,
 		RunningNumber: runningNumber,
 		FileName:      handler.Filename,
 	}
@@ -349,5 +349,5 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/project/"+strconv.Itoa(projectID), http.StatusSeeOther)
+	http.Redirect(w, r, "/worksheet/"+strconv.Itoa(worksheetID), http.StatusSeeOther)
 }
