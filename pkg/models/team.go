@@ -29,7 +29,7 @@ func (db *Database) ListTeams() (Teams, error) {
 }
 
 func (db *Database) GetTeam(id int) (*Team, error) {
-	stmt := `SELECT id, name FROM worksheets WHERE id = ?`
+	stmt := `SELECT id, name FROM teams WHERE id = ?`
 	row := db.QueryRow(stmt, id)
 
 	t := &Team{}
@@ -44,8 +44,8 @@ func (db *Database) GetTeam(id int) (*Team, error) {
 }
 
 func (db *Database) InsertTeam(team *Team) error {
-	stmt := `INSERT INTO teams (id, name) VALUES (?, ?)`
-	_, err := db.Exec(stmt, team.ID, team.Name)
+	stmt := `INSERT INTO teams (name) VALUES (?)`
+	_, err := db.Exec(stmt, team.Name)
 	if err != nil {
 		return err
 	}

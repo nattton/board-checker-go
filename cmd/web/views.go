@@ -20,8 +20,10 @@ type HTMLData struct {
 	Error        string
 	Path         string
 	Form         interface{}
-	Worksheet      *models.Worksheet
-	Worksheets     models.Worksheets
+	Team         *models.Team
+	Teams        models.Teams
+	Worksheet    *models.Worksheet
+	Worksheets   models.Worksheets
 	Photos       models.Photos
 	FormFields   models.FormFields
 	PageInfo     *models.PageInfo

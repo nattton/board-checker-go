@@ -14,7 +14,20 @@ func (app *App) Routes() http.Handler {
 	router.HandleFunc("/user/login", app.VerifyUser).Methods("POST")
 	router.Handle("/user/logout", app.RequireLogin(http.HandlerFunc(app.LogoutUser))).Methods("POST")
 
-	router.Handle("/worksheet/new", app.RequireLogin(http.HandlerFunc(app.EditWorksheet))).Methods("GET")
+	// Team
+	router.Handle("/teams",
+		app.RequireLogin(http.HandlerFunc(app.IndexTeam))).Methods("GET")
+	router.Handle("/team/new",
+		app.RequireLogin(http.HandlerFunc(app.NewTeam))).Methods("GET")
+	router.Handle("/team/new",
+		app.RequireLogin(http.HandlerFunc(app.SaveTeam))).Methods("POST")
+	router.Handle("/team/{team_id:[0-9]+}/edit",
+		app.RequireLogin(http.HandlerFunc(app.EditTeam))).Methods("GET")
+	router.Handle("/team/{team_id:[0-9]+}/edit",
+		app.RequireLogin(http.HandlerFunc(app.SaveTeam))).Methods("POST")
+
+	// Worksheet
+	router.Handle("/worksheet/new", app.RequireLogin(http.HandlerFunc(app.NewWorksheet))).Methods("GET")
 	router.Handle("/worksheet/new", app.RequireLogin(http.HandlerFunc(app.SaveWorksheet))).Methods("POST")
 
 	worksheetRouter := router.PathPrefix("/worksheet/{worksheet_id:[0-9]+}").Subrouter()

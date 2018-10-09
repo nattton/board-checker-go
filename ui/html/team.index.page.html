@@ -1,5 +1,15 @@
 {{define "page-title"}}{{.Title}}{{end}}
 {{define "page-body"}}
+
+<div class="row">
+      <div class="col-sm-9">
+            <h2>Teams</h2>
+      </div>
+      <div class="col-sm-3">
+            <a class="btn btn-success" href="/team/new">New Team</a>
+      </div>
+</div>
+
 <div class="row">
       {{if .Teams}}
       <table class="table table-responsive">

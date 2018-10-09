@@ -1,0 +1,19 @@
+{{define "page-title"}}New Worksheet{{end}}
+{{define "page-body"}}
+<div class="clearfix"></div>
+      <form action="/team/new" method="POST">
+      <div class="row">
+            <div class="col-sm-9"><h2>New Team</h2></div>
+      </div>
+      <div class="row">
+            <label for="team_name" class="col-md-3 col-form-label">Team Name</label>
+            <div class="col-md-9">
+            <input type="text" class="form-control" id="team_name" name="team_name" value="">
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-4"></div>
+            <div class=".col-sm-8"><button class="btn btn-primary">Save</button></div>
+      </div>
+      </form>
+{{end}}

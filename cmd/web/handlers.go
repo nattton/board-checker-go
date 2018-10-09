@@ -31,7 +31,7 @@ func (app *App) Home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.RenderHTML(w, r, []string{"home.page.html"}, &HTMLData{
-		Flash:    flash,
+		Flash:      flash,
 		Worksheets: worksheets,
 	})
 }
@@ -101,6 +101,134 @@ func (app *App) LogoutUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func (app *App) IndexTeam(w http.ResponseWriter, r *http.Request) {
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	teams, err := db.ListTeams()
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	session := app.Sessions.Load(r)
+	flash, err := session.PopString(w, "flash")
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"team.index.page.html"}, &HTMLData{
+		Flash: flash,
+		Teams: teams,
+	})
+}
+
+func (app *App) NewTeam(w http.ResponseWriter, r *http.Request) {
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"team.new.page.html"}, &HTMLData{})
+}
+
+func (app *App) SaveTeam(w http.ResponseWriter, r *http.Request) {
+	teamID, _ := strconv.Atoi(mux.Vars(r)["team_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	decoder := form.NewDecoder()
+
+	var f forms.Team
+	err := decoder.Decode(&f, r.PostForm)
+	if err != nil {
+		app.ClientError(w, http.StatusBadRequest)
+		return
+	}
+
+	team, err := db.GetTeam(teamID)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	if team == nil {
+		team = &models.Team{
+			Name: f.Name,
+		}
+		err = db.InsertTeam(team)
+		if err != nil {
+			app.ServerError(w, err)
+			return
+		}
+
+	} else {
+		team = &models.Team{
+			ID:   teamID,
+			Name: f.Name,
+		}
+		err = db.UpdateTeam(team)
+		if err != nil {
+			app.ServerError(w, err)
+			return
+		}
+	}
+
+	session := app.Sessions.Load(r)
+	err = session.PutString(w, "flash", "Worksheet was saved successfully!")
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	http.Redirect(w, r, "/teams", http.StatusSeeOther)
+}
+
+func (app *App) EditTeam(w http.ResponseWriter, r *http.Request) {
+	teamID, _ := strconv.Atoi(mux.Vars(r)["team_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	team, err := db.GetTeam(teamID)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+	if team == nil {
+		app.NotFound(w, r)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"team.edit.page.html"}, &HTMLData{
+		Team: team,
+	})
+}
+
 func (app *App) ShowWorksheet(w http.ResponseWriter, r *http.Request) {
 	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
@@ -139,8 +267,22 @@ func (app *App) ShowWorksheet(w http.ResponseWriter, r *http.Request) {
 
 	app.RenderHTML(w, r, []string{"worksheet.show.page.html", "worksheet.navbar.html", "photo.index.partial.html", "pagination.partial.html"}, &HTMLData{
 		Worksheet: worksheet,
-		Photos:  photos,
+		Photos:    photos,
 	})
+}
+
+func (app *App) NewWorksheet(w http.ResponseWriter, r *http.Request) {
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"worksheet.new.page.html", "worksheet.navbar.html"}, &HTMLData{})
 }
 
 func (app *App) EditWorksheet(w http.ResponseWriter, r *http.Request) {
@@ -156,7 +298,7 @@ func (app *App) EditWorksheet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if worksheetID == 0 {
-		app.RenderHTML(w, r, []string{"worksheet.new.page.html", "worksheet.navbar.html"}, &HTMLData{})
+		app.NotFound(w, r)
 		return
 	}
 
@@ -332,7 +474,7 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	photo := &models.Photo{
-		WorksheetID:     worksheet.ID,
+		WorksheetID:   worksheet.ID,
 		RunningNumber: runningNumber,
 		FileName:      handler.Filename,
 	}
