@@ -20,26 +20,26 @@ func (db *Database) CreateTable() error {
 		id int(11) NOT NULL AUTO_INCREMENT,
 		worksheet_id int(11) NOT NULL,
 		running_number int(5) NOT NULL,
-		filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+		filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 		created datetime NOT NULL,
-		location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+		location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 		photoscol varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
 		PRIMARY KEY (id)
 	  ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 	
 	  CREATE TABLE teams (
 		id int(11) NOT NULL AUTO_INCREMENT,
-		name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+		name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 		PRIMARY KEY (id)
 	  ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 	
 	
 	CREATE TABLE worksheets (
 		id int(11) NOT NULL AUTO_INCREMENT,
-		number varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+		number varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 		team_id int(11) NOT NULL,
 		zone_id int(11) NOT NULL,
-		name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+		name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 		created datetime NOT NULL,
 		PRIMARY KEY (id,number),
 		UNIQUE KEY number_UNIQUE (number)
