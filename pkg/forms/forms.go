@@ -35,9 +35,15 @@ type Team struct {
 	Name string `form:"team_name"`
 }
 
+type Zone struct {
+	Name string `form:"zone_name"`
+}
+
 type Worksheet struct {
-	ID   int    `form:"worksheet_id"`
-	Name string `form:"worksheet_name"`
+	Number string `form:"worksheet_number"`
+	Name   string `form:"worksheet_name"`
+	ZoneID int    `form:"worksheet_zone_id"`
+	TeamID int    `form:"worksheet_team_id"`
 }
 
 type File struct {

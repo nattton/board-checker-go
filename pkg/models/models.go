@@ -6,9 +6,14 @@ import (
 )
 
 type Worksheet struct {
-	ID      int       `json:"id"`
-	Name    string    `json:"name"`
-	Created time.Time `json:"created"`
+	ID       int    `json:"id"`
+	Number   string `json:"number"`
+	Name     string `json:"name"`
+	ZoneID   int
+	ZoneName string
+	TeamID   int
+	TeamName string
+	Created  time.Time `json:"created"`
 }
 
 type Worksheets []*Worksheet
@@ -19,6 +24,13 @@ type Team struct {
 }
 
 type Teams []*Team
+
+type Zone struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type Zones []*Zone
 
 type Photo struct {
 	ID            int

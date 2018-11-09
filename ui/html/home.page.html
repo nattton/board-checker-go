@@ -1,6 +1,33 @@
 {{define "page-title"}}Home{{end}}
 {{define "page-body"}}
 
+
+
+<div class="row">
+            <div class="col-sm-9">
+                  <h2>Date</h2>
+            </div>
+</div>
+            
+            <div class="row">
+            {{if .Dates}}
+                <table class="table">
+                      <thead>
+                            <th>Date</th>
+                      </thead>
+                      {{range .Dates}}
+                      <tr>
+                            <td>
+                                    <a href="/worksheet/date/{{.}}">{{.}}</a>
+                            </td>
+                      </tr>
+                      {{end}}
+                </table>
+            {{else}}
+                <p>There's nothing to see here yet!</p>
+            {{end}}
+            </div>
+
 <div class="row">
 <div class="col-sm-9">
       <h2>Worksheets</h2>
@@ -14,14 +41,14 @@
 {{if .Worksheets}}
     <table class="table">
           <thead>
-                <th>ID</th>
+                <th>Number</th>
                 <th>Name</th>
                 <th>Date</th>
           </thead>
           {{range .Worksheets}}
           <tr>
                 <td>
-                      <a href="/worksheet/{{.ID}}">{{.ID}}</a>
+                      <a href="/worksheet/{{.ID}}">{{.Number}}</a>
                 </td>
                 <td>{{.Name}}</td>
                 <td>{{humanDate .Created}}</td>

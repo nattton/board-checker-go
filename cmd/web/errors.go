@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"runtime/debug"
 
@@ -10,11 +11,12 @@ import (
 
 func (app *App) ServerError(w http.ResponseWriter, err error) {
 	log.Printf("%s\n%s", err.Error(), debug.Stack())
-	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	http.Error(w, fmt.Sprintf("%s : %s", "Internal Server Error ", err.Error()), http.StatusInternalServerError)
 }
 
-func (app *App) ClientError(w http.ResponseWriter, status int) {
-	http.Error(w, http.StatusText(status), status)
+func (app *App) ClientError(w http.ResponseWriter, err error, status int) {
+	log.Printf("%s\n%s", err.Error(), debug.Stack())
+	http.Error(w, fmt.Sprintf("%s : %s", http.StatusText(status), err.Error()), status)
 }
 
 func (app *App) Unauthorized(w http.ResponseWriter, r *http.Request) {

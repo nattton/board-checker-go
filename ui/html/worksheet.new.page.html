@@ -7,15 +7,35 @@
             <div class="col-sm-9"><h2>New Worksheet</h2></div>
       </div>
       <div class="row">
-            <label for="worksheet_id" class="col-md-3 col-form-label">Worksheet ID.</label>
+            <label for="worksheet_number" class="col-md-3 col-form-label">Worksheet Number.</label>
             <div class="col-md-9">
-            <input type="text" class="form-control" id="worksheet_id" name="worksheet_id" value="">
+            <input type="text" class="form-control" id="worksheet_number" name="worksheet_number" value="">
             </div>
       </div>
       <div class="row">
             <label for="worksheet_name" class="col-md-3 col-form-label">Worksheet Name</label>
             <div class="col-md-9">
             <input type="text" class="form-control" id="worksheet_name" name="worksheet_name" value="">
+            </div>
+      </div>
+      <div class="row">
+            <label for="worksheet_zone_id" class="col-md-3 col-form-label">Zone</label>
+            <div class="col-md-9">
+                  <select  class="form-control" id="worksheet_zone_id" name="worksheet_zone_id">
+                  {{range $key, $value := $.Zones}}
+                        <option value="{{$value.ID}}">{{$value.Name}}</option>
+                  {{end}}
+                  </select>
+            </div>
+      </div>
+      <div class="row">
+            <label for="worksheet_team_id" class="col-md-3 col-form-label">Team</label>
+            <div class="col-md-9">
+                  <select  class="form-control" id="worksheet_team_id" name="worksheet_team_id">
+                  {{range $key, $value := $.Teams}}
+                        <option value="{{$value.ID}}">{{$value.Name}}</option>
+                  {{end}}
+                  </select>
             </div>
       </div>
       <div class="row">

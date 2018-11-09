@@ -1,0 +1,21 @@
+{{define "page-title"}}Zone - {{.Zone.Name}}{{end}}
+{{define "page-body"}}
+<div class="clearfix"></div>
+      {{with .Zone}}
+      <form action="/zone/{{.ID}}/edit" method="POST">
+      <div class="row">
+            <div class="col-sm-9"><h2>Zone No. {{.ID}} - {{.Name}}</h2></div>
+      </div>
+      <div class="row">
+            <label for="zone_name" class="col-md-3 col-form-label">Zone Name</label>
+            <div class="col-md-9">
+            <input type="text" class="form-control" id="zone_name" name="zone_name" value="{{.Name}}">
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-4"></div>
+            <div class=".col-sm-8"><button class="btn btn-primary">Save</button></div>
+      </div>
+      </form>
+      {{end}}
+{{end}}

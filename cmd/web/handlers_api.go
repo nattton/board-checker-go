@@ -25,7 +25,7 @@ type UserClaims struct {
 func (app *App) APIUserLogin(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		app.ClientError(w, http.StatusBadRequest)
+		app.ClientError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -89,14 +89,15 @@ type JSONWorksheets struct {
 func (j JSONWorksheets) MarshalJSON() ([]byte, error) {
 	type Worksheet struct {
 		ID      int    `json:"id"`
+		Number  string `json:"number"`
 		Name    string `json:"name"`
-		FileURL string `json:"fileURL"`
 		Created string `json:"created"`
 	}
 	worksheets := make([]Worksheet, len(j.Worksheets))
 	for i, v := range j.Worksheets {
 		worksheets[i] = Worksheet{
 			ID:      v.ID,
+			Number:  v.Number,
 			Name:    v.Name,
 			Created: v.Created.Format(time.RFC3339),
 		}
@@ -131,8 +132,34 @@ func (j JSONPhotos) MarshalJSON() ([]byte, error) {
 func (app *App) APIListWorksheets(w http.ResponseWriter, r *http.Request) {
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
-	log.Printf("Test")
 	worksheets, err := db.ListWorksheets()
+	if err == sql.ErrNoRows {
+		app.APINotFound(w, r)
+		return
+	} else if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(map[string]interface{}{
+		"worksheets": JSONWorksheets{worksheets, "http://" + r.Host},
+	})
+	if err != nil {
+		log.Fatal(err)
+		app.ServerError(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}
+
+func (app *App) APIListWorksheetsByTeam(w http.ResponseWriter, r *http.Request) {
+	teamID, _ := strconv.Atoi(mux.Vars(r)["team_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+	worksheets, err := db.ListWorksheetsByTeam(teamID)
 	if err == sql.ErrNoRows {
 		app.APINotFound(w, r)
 		return

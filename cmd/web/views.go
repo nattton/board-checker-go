@@ -20,8 +20,11 @@ type HTMLData struct {
 	Error        string
 	Path         string
 	Form         interface{}
+	Dates        []string
 	Team         *models.Team
 	Teams        models.Teams
+	Zone         *models.Zone
+	Zones        models.Zones
 	Worksheet    *models.Worksheet
 	Worksheets   models.Worksheets
 	Photos       models.Photos

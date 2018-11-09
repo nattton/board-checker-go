@@ -29,6 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/teams">Team {{if eq .Path "/teams"}}<span class="sr-only">(current)</span>{{end}}</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/zones">Zone {{if eq .Path "/zones"}}<span class="sr-only">(current)</span>{{end}}</a>
+            </li>
             {{if .LoggedIn}}
             {{end}}
           </ul>
