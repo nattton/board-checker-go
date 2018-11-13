@@ -711,18 +711,20 @@ func (app *App) DownloadPhoto(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(file)
 	}
 
-	err = ZipFiles(app.StoreDir+"/zip_"+strconv.Itoa(worksheetID)+".zip", files)
+	zipFileName := "photo_" + strconv.Itoa(worksheetID) + ".zip"
+	downloadPath, err := ZipFiles(app, zipFileName, files)
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Redirect(w, r, "/store/"+"/zip_"+strconv.Itoa(worksheetID)+".zip", http.StatusSeeOther)
+	http.Redirect(w, r, downloadPath, http.StatusSeeOther)
 }
 
-func ZipFiles(filename string, files []string) error {
-
-	newZipFile, err := os.Create(filename)
+func ZipFiles(app *App, filename string, files []string) (string, error) {
+	fileDir := app.StoreDir + "/temp"
+	os.MkdirAll(fileDir, os.ModePerm)
+	newZipFile, err := os.Create(fileDir + "/" + filename)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer newZipFile.Close()
 
@@ -731,22 +733,21 @@ func ZipFiles(filename string, files []string) error {
 
 	// Add files to zip
 	for _, file := range files {
-
 		zipfile, err := os.Open(file)
 		if err != nil {
-			return err
+			return "", err
 		}
 		defer zipfile.Close()
 
 		// Get the file information
 		info, err := zipfile.Stat()
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		// Using FileInfoHeader() above only uses the basename of the file. If we want
@@ -759,11 +760,11 @@ func ZipFiles(filename string, files []string) error {
 
 		writer, err := zipWriter.CreateHeader(header)
 		if err != nil {
-			return err
+			return "", err
 		}
 		if _, err = io.Copy(writer, zipfile); err != nil {
-			return err
+			return "", err
 		}
 	}
-	return nil
+	return "/store/temp/" + filename, nil
 }
