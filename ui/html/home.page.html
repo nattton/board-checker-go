@@ -43,6 +43,8 @@
           <thead>
                 <th>Number</th>
                 <th>Name</th>
+                <th>Team</th>
+                <th>Zone</th>
                 <th>Date</th>
           </thead>
           {{range .Worksheets}}
@@ -51,6 +53,8 @@
                       <a href="/worksheet/{{.ID}}">{{.Number}}</a>
                 </td>
                 <td>{{.Name}}</td>
+                <td>{{.TeamName}}</td>
+                <td>{{.ZoneName}}</td>
                 <td>{{humanDate .Created}}</td>
           </tr>
           {{end}}

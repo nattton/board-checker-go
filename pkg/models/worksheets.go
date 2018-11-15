@@ -32,9 +32,10 @@ func (db *Database) ListDistinctDate() ([]string, error) {
 }
 
 func (db *Database) ListWorksheets() (Worksheets, error) {
-	stmt := `SELECT id, number, name, created 
-	FROM worksheets 
-	ORDER BY created DESC`
+	stmt := `SELECT w.id, w.number, w.name, w.created, z.id zone_id, z.name zone_name, t.id team_id, t.name team_name FROM worksheets w 
+	INNER JOIN zones z on (w.zone_id = z.id) 
+	INNER JOIN teams t on (w.team_id = t.id)
+	ORDER BY w.created DESC`
 	rows, err := db.Query(stmt)
 	if err != nil {
 		return nil, err
@@ -45,7 +46,7 @@ func (db *Database) ListWorksheets() (Worksheets, error) {
 	worksheets := Worksheets{}
 	for rows.Next() {
 		p := &Worksheet{}
-		rows.Scan(&p.ID, &p.Number, &p.Name, &p.Created)
+		rows.Scan(&p.ID, &p.Number, &p.Name, &p.Created, &p.ZoneID, &p.ZoneName, &p.TeamID, &p.TeamName)
 		if err != nil {
 			return nil, err
 		}
