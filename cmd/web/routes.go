@@ -57,6 +57,8 @@ func (app *App) Routes() http.Handler {
 		app.RequireLogin(http.HandlerFunc(app.EditWorksheet))).Methods("GET")
 	worksheetRouter.Handle("/edit",
 		app.RequireLogin(http.HandlerFunc(app.SaveWorksheet))).Methods("POST")
+	worksheetRouter.Handle("/delete",
+		app.RequireLogin(http.HandlerFunc(app.DeleteWorksheet))).Methods("POST")
 	worksheetRouter.Handle("/photo/new",
 		app.RequireLogin(http.HandlerFunc(app.NewPhoto))).Methods("GET")
 	worksheetRouter.Handle("/photo/new",

@@ -518,6 +518,39 @@ func (app *App) EditWorksheet(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app *App) DeleteWorksheet(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	if worksheetID == 0 {
+		app.NotFound(w, r)
+		return
+	}
+
+	err := db.DeleteWorksheet(worksheetID)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	session := app.Sessions.Load(r)
+	err = session.PutString(w, "flash", "Worksheet was deleted successfully!")
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 func (app *App) SaveWorksheet(w http.ResponseWriter, r *http.Request) {
 	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 

@@ -182,3 +182,12 @@ func (db *Database) UpdateWorksheet(worksheet *Worksheet) error {
 	}
 	return nil
 }
+
+func (db *Database) DeleteWorksheet(worksheetID int) error {
+	stmt := `DELETE FROM worksheets WHERE id = ?`
+	_, err := db.Exec(stmt, worksheetID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

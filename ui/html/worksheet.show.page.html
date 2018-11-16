@@ -4,15 +4,21 @@
 
 {{with .Worksheet}}
 <div class="row">
-      <div class="col-sm-9">
+      <div class="col-sm-8">
             <h2>{{.Name}}</h2>
+      </div>
+      <div class="col-sm-1">
+            <form action="/worksheet/{{.ID}}/delete" method="POST">
+                  <button class="btn btn-danger" 
+                  onclick="return confirm('Are you sure you want to delete this worksheet?');">Delete</button>
+            </form>
       </div>
       <div class="col-sm-1">
             <a class="btn btn-success" href="/worksheet/{{.ID}}/edit">Edit</a>
       </div>
       <div class="col-sm-2">
-                  <a class="btn btn-success" href="/worksheet/{{.ID}}/download">Download</a>
-            </div>
+            <a class="btn btn-success" href="/worksheet/{{.ID}}/download">Download</a>
+      </div>
       <!-- <div class="col-sm-2">
             <a class="btn btn-success" href="/worksheet/{{.ID}}/photo/new">New Photo</a>
       </div> -->
