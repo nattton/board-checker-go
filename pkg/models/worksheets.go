@@ -176,7 +176,7 @@ func (db *Database) InsertWorksheet(worksheet *Worksheet) error {
 
 func (db *Database) UpdateWorksheet(worksheet *Worksheet) error {
 	stmt := `UPDATE worksheets SET number = ?, name = ?, zone_id = ?, team_id = ? WHERE id = ?`
-	_, err := db.Exec(stmt, worksheet.Number, worksheet.Name, worksheet.ID, worksheet.ZoneID, worksheet.TeamID)
+	_, err := db.Exec(stmt, worksheet.Number, worksheet.Name, worksheet.ZoneID, worksheet.TeamID, worksheet.ID)
 	if err != nil {
 		return err
 	}

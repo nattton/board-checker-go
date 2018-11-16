@@ -508,8 +508,13 @@ func (app *App) EditWorksheet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	zones, _ := db.ListZones()
+	teams, _ := db.ListTeams()
+
 	app.RenderHTML(w, r, []string{"worksheet.edit.page.html", "worksheet.navbar.html"}, &HTMLData{
 		Worksheet: worksheet,
+		Zones:     zones,
+		Teams:     teams,
 	})
 }
 
@@ -560,8 +565,11 @@ func (app *App) SaveWorksheet(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		worksheet = &models.Worksheet{
-			ID:   worksheetID,
-			Name: f.Name,
+			ID:     worksheetID,
+			Number: f.Number,
+			Name:   f.Name,
+			ZoneID: f.ZoneID,
+			TeamID: f.TeamID,
 		}
 		err = db.UpdateWorksheet(worksheet)
 		if err != nil {
