@@ -90,7 +90,8 @@ func (db *Database) ListPhotosMaps(worksheetID int, storeDir string) (Locations,
 		exif.RegisterParsers(mknote.All...)
 		x, err := exif.Decode(f)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err.Error())
+			return locations, nil
 		}
 		lat, long, err := x.LatLong()
 		fmt.Printf("lat, long: %f %f\n", lat, long)
