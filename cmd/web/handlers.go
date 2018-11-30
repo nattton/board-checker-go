@@ -622,6 +622,49 @@ func (app *App) SaveWorksheet(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (app *App) ShowWorksheetMaps(w http.ResponseWriter, r *http.Request) {
+	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	worksheet, err := db.GetWorksheet(worksheetID)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+	if worksheet == nil {
+		app.NotFound(w, r)
+		return
+	}
+
+	query := forms.NewQuery()
+	query.Q = r.FormValue("q")
+	query.Start, _ = strconv.Atoi(r.FormValue("start"))
+	maxResults, err := strconv.Atoi(r.FormValue("maxResults"))
+	if err == nil {
+		query.MaxResults = maxResults
+	}
+
+	locations, err := db.ListPhotosMaps(worksheet.ID, app.StoreDir)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"worksheet.maps.page.html", "worksheet.navbar.html"},
+		&HTMLData{
+			Worksheet: worksheet,
+			Locations: locations,
+		})
+}
+
 func (app *App) NewPhoto(w http.ResponseWriter, r *http.Request) {
 	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 

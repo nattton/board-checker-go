@@ -19,9 +19,6 @@
       <div class="col-sm-2">
             <a class="btn btn-success" href="/worksheet/{{.ID}}/download">Download</a>
       </div>
-      <!-- <div class="col-sm-2">
-            <a class="btn btn-success" href="/worksheet/{{.ID}}/photo/new">New Photo</a>
-      </div> -->
 </div>
 <div class="row">
       <label for="" class="col-sm-2"><strong>Zone</strong></label>
@@ -33,6 +30,9 @@
 </div>
 <div class="row">
       <div class="col-sm-6"><img src="https://chart.googleapis.com/chart?cht=qr&amp;chl={{.ID}}&amp;chs=200x200" ></div>
+      <div class="col-sm-2">
+            <a href="/worksheet/{{.ID}}/maps">Maps</a>
+      </div>
 </div>
 {{end}}
 

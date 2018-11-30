@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -28,6 +29,7 @@ type HTMLData struct {
 	Worksheet    *models.Worksheet
 	Worksheets   models.Worksheets
 	Photos       models.Photos
+	Locations    models.Locations
 	FormFields   models.FormFields
 	PageInfo     *models.PageInfo
 }
@@ -55,6 +57,10 @@ func (app *App) RenderHTML(w http.ResponseWriter, r *http.Request, pages []strin
 		"humanDate":   humanDate,
 		"timeString":  timeString,
 		"humanNumber": humanNumber,
+		"marshal": func(v interface{}) template.JS {
+			a, _ := json.Marshal(v)
+			return template.JS(a)
+		},
 	}
 
 	ts, err := template.New("").Funcs(fm).ParseFiles(files...)
@@ -89,4 +95,9 @@ func timeString(ts string) string {
 
 func humanNumber(amount float64) string {
 	return humanize.Commaf(amount)
+}
+
+func marshal(v interface{}) template.JS {
+	a, _ := json.Marshal(v)
+	return template.JS(a)
 }
