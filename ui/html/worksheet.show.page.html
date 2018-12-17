@@ -1,10 +1,9 @@
 {{define "page-title"}}Worksheet No. {{.Worksheet.ID}} - {{.Worksheet.Name}}{{end}}
 {{define "page-body"}}
 {{template "worksheet-navbar" .}}
-
 {{with .Worksheet}}
 <div class="row">
-      <div class="col-sm-8">
+      <div class="col-sm-5">
             <h2>{{.Name}}</h2>
       </div>
       <div class="col-sm-1">
@@ -19,6 +18,9 @@
       <div class="col-sm-2">
             <a class="btn btn-success" href="/worksheet/{{.ID}}/download">Download</a>
       </div>
+      <div class="col-sm-1">
+            <button class="btn btn-info" onclick="return openMaps();">Show Maps</button>
+      </div>
 </div>
 <div class="row">
       <label for="" class="col-sm-2"><strong>Zone</strong></label>
@@ -30,12 +32,102 @@
 </div>
 <div class="row">
       <div class="col-sm-6"><img src="https://chart.googleapis.com/chart?cht=qr&amp;chl={{.ID}}&amp;chs=200x200" ></div>
-      <div class="col-sm-2">
-            <a href="/worksheet/{{.ID}}/maps">Maps</a>
-      </div>
 </div>
 {{end}}
+<style>
+      /* Always set the map height explicitly to define the size of the div
+            * element that contains the map. */
+      #map {
+            height: 500px;   
+            width: 900px;  
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+      }
+      </style>
+
+<div id="map"></div>
 
 {{template "photo-index-partial" .}}
 
+<script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+<script>
+window.onload=onLoad;
+
+var arrayLocation = [];
+
+function ConvertDMSToDD(degrees, minutes, seconds, direction) {
+    var dd = Number(degrees) + Number(minutes)/60 + Number(seconds)/(60*60);
+
+    if (direction == "S" || direction == "W") {
+        dd = dd * -1;
+    } // Don't do anything for N or E
+    return dd;
+}
+
+function onLoad() {
+      $("#map").hide();
+      $(".photo-board").each(function(index){
+            var img = this
+            EXIF.getData(img, function() {
+                  var linkMaps = $(`.link-maps:eq(${index})`);
+                  var make = EXIF.getTag(this, "Make");
+                  var latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                  var lat = EXIF.getTag(this, "GPSLatitude");
+                  var lngRef = EXIF.getTag(this, "GPSLongitudeRef");
+                  var lng = EXIF.getTag(this, "GPSLongitude");
+                  if(latRef != "" && lat != undefined){
+                        var dLat = ConvertDMSToDD(lat[0], lat[1], lat[2], latRef)
+                        var dLng = ConvertDMSToDD(lng[0], lng[1], lng[2], lngRef)
+                        var latLng = `https:\/\/www.google.com\/maps\/place\/${dLat},${dLng}`;
+                        console.log(latLng);
+                        $(`.section-link-maps:eq(${index})`).show();
+                        $(`.link-maps:eq(${index})`).attr("href", latLng);
+                        arrayLocation.push({"lat": dLat, "lng": dLng});
+                  }
+            });
+      });
+}
+
+function openMaps() {
+      console.log(arrayLocation);
+      $("#map").show();
+      initMap();
+      return false;
+}
+
+function initMap() {
+      var locations = arrayLocation;
+                  var myLatLng = locations[0];
+      
+                  var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: 14,
+                  center: myLatLng,
+                  mapTypeId: google.maps.MapTypeId.ROADMAP
+                  });
+      
+                  var infowindow = new google.maps.InfoWindow();
+                  var marker, i;
+                  for (i = 0; i < locations.length; i++) {  
+                        marker = new google.maps.Marker({
+                        position: locations[i],
+                        map: map
+                        });
+      
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                        infowindow.setContent(i.toString());
+                        infowindow.open(map, marker);
+                        }
+                        })(marker, i));
+                  }
+            }
+            
+          </script>
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoFiC5wMqLpLAHYbb3ca76b_SXIWkpmuE">
+          </script>
 {{end}}

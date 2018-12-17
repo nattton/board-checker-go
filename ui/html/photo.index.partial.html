@@ -4,10 +4,11 @@
       {{template "pagination-partial" .}}
       {{range .Photos}}
       <div class="col-6">
-            <img class="img-fluid" src="{{.FilePath}}" >
+            <img class="img-fluid photo-board" src="{{.FilePath}}" id="img1"  >
             <div>
                   <h5>No. {{.RunningNumber}}</h5>
                   {{humanDate .Created}} {{if .Location}} / {{.Location}}{{end}}
+                  <div class="section-link-maps" style="display:none">Location : <a class="link-maps" target="_blank" href="">Open Maps</a></div>
             </div>
       </div>
       {{end}}
