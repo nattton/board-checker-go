@@ -1,32 +1,27 @@
 {{define "page-title"}}Home{{end}}
 {{define "page-body"}}
+<link rel="stylesheet" href="/static/node_modules/pg-calendar/dist/css/pignose.calendar.min.css" />
+<script src="/static/node_modules/moment/moment.js"></script>
+<script src="/static/node_modules/pg-calendar/dist/js/pignose.calendar.min.js"></script>
 
-
-
-<div class="row">
-            <div class="col-sm-9">
-                  <h2>Date</h2>
-            </div>
-</div>
-            
-            <div class="row">
-            {{if .Dates}}
-                <table class="table">
-                      <thead>
-                            <th>Date</th>
-                      </thead>
-                      {{range .Dates}}
-                      <tr>
-                            <td>
-                                    <a href="/worksheet/date/{{.}}">{{.}}</a>
-                            </td>
-                      </tr>
-                      {{end}}
-                </table>
-            {{else}}
-                <p>There's nothing to see here yet!</p>
-            {{end}}
-            </div>
+<script>
+$(function() {
+    $('.calendar').pignoseCalendar({
+          select: function(date, context) {
+            var selectDate = date[0];
+            window.location = "/worksheet/date/" + selectDate.format("YYYY-MM-DD");
+          }
+    });
+});
+</script>
+<div class="col-sm-9">
+            <h2>Date</h2>
+      </div>
+<div class="row" style="padding-bottom: 30px;">
+      <div class="col-sm-12">
+            <div class="calendar"></div>
+      </div>
+</div>  
 
 <div class="row">
 <div class="col-sm-9">
