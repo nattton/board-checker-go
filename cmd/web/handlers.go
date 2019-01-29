@@ -26,11 +26,21 @@ func (app *App) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	worksheets, err := db.ListWorksheets()
+	query := forms.NewQuery()
+	query.Q = r.FormValue("q")
+	query.Start, _ = strconv.Atoi(r.FormValue("start"))
+	maxResults, err := strconv.Atoi(r.FormValue("maxResults"))
+	if err == nil {
+		query.MaxResults = maxResults
+	}
+
+	worksheets, pageInfo, err := db.ListWorksheets(query)
 	if err != nil {
 		app.ServerError(w, err)
 		return
 	}
+
+	pageInfo.ConfigPaginations("/?", query.Start)
 
 	session := app.Sessions.Load(r)
 	flash, err := session.PopString(w, "flash")
@@ -39,10 +49,11 @@ func (app *App) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.RenderHTML(w, r, []string{"home.page.html"}, &HTMLData{
+	app.RenderHTML(w, r, []string{"home.page.html", "pagination.partial.html"}, &HTMLData{
 		Flash:      flash,
 		Dates:      dates,
 		Worksheets: worksheets,
+		PageInfo:   pageInfo,
 	})
 }
 

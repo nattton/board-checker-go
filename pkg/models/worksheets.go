@@ -1,6 +1,10 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"gitlab.com/code-mobi/board-checker/pkg/forms"
+)
 
 func (db *Database) ListDistinctDate() ([]string, error) {
 	stmt := `SELECT DISTINCT date_format(created, '%Y-%m-%d') as uniquedates 
@@ -31,14 +35,32 @@ func (db *Database) ListDistinctDate() ([]string, error) {
 	return listDate, nil
 }
 
-func (db *Database) ListWorksheets() (Worksheets, error) {
-	stmt := `SELECT w.id, w.number, w.name, w.created, z.id zone_id, z.name zone_name, t.id team_id, t.name team_name FROM worksheets w 
+func (db *Database) ListWorksheets(q *forms.Query) (Worksheets, *PageInfo, error) {
+	pageInfo := &PageInfo{MaxResults: q.MaxResults}
+	countStmt := "SELECT count(w.id) "
+	selectStmt := "SELECT w.id, w.number, w.name, w.created, z.id zone_id, z.name zone_name, t.id team_id, t.name team_name "
+	stmt := ` FROM worksheets w 
 	INNER JOIN zones z on (w.zone_id = z.id) 
-	INNER JOIN teams t on (w.team_id = t.id)
-	ORDER BY w.created DESC`
-	rows, err := db.Query(stmt)
+	INNER JOIN teams t on (w.team_id = t.id) `
+
+	params := []interface{}{}
+
+	stmt += " ORDER BY w.created DESC"
+
+	row := db.QueryRow(countStmt+stmt, params...)
+	err := row.Scan(&pageInfo.TotalResults)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
+	}
+
+	if q.MaxResults > -1 {
+		stmt += " LIMIT ? OFFSET ?"
+		params = append(params, q.MaxResults, q.Start)
+	}
+
+	rows, err := db.Query(selectStmt+stmt, params...)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	defer rows.Close()
@@ -48,16 +70,16 @@ func (db *Database) ListWorksheets() (Worksheets, error) {
 		p := &Worksheet{}
 		rows.Scan(&p.ID, &p.Number, &p.Name, &p.Created, &p.ZoneID, &p.ZoneName, &p.TeamID, &p.TeamName)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		worksheets = append(worksheets, p)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return worksheets, nil
+	return worksheets, pageInfo, nil
 }
 
 func (db *Database) ListWorksheetsByDate(date string) (Worksheets, error) {

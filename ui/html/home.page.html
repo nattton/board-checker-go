@@ -34,6 +34,7 @@ $(function() {
 
 <div class="row">
 {{if .Worksheets}}
+      {{template "pagination-partial" .}}
     <table class="table">
           <thead>
                 <th>Number</th>
@@ -54,6 +55,7 @@ $(function() {
           </tr>
           {{end}}
     </table>
+    {{template "pagination-partial" .}}
 {{else}}
     <p>There's nothing to see here yet!</p>
 {{end}}

@@ -132,7 +132,12 @@ func (j JSONPhotos) MarshalJSON() ([]byte, error) {
 func (app *App) APIListWorksheets(w http.ResponseWriter, r *http.Request) {
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
-	worksheets, err := db.ListWorksheets()
+
+	query := forms.NewQuery()
+	query.Q = r.FormValue("q")
+	query.MaxResults = 200
+
+	worksheets, _, err := db.ListWorksheets(query)
 	if err == sql.ErrNoRows {
 		app.APINotFound(w, r)
 		return
