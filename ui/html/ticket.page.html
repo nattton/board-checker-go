@@ -3,7 +3,7 @@
       {{with .Attendee}}
       <div class="row" style="margin:20px;">
             <div class="col-md-12 text-center">
-                  <img src="https://chart.googleapis.com/chart?cht=qr&amp;chl={{.TicketCode}}&amp;chs=200x200&amp;chld=L|2">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data={{.TicketCode}}">
                   <div class="text-center"><h5>{{.TicketCode}}</h5></div>
             </div>
       </div>
