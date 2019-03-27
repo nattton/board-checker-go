@@ -60,3 +60,12 @@ func (db *Database) UpdateTeam(team *Team) error {
 	}
 	return nil
 }
+
+func (db *Database) DeleteTeam(teamID int) error {
+	stmt := `DELETE FROM teams WHERE id = ?`
+	_, err := db.Exec(stmt, teamID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

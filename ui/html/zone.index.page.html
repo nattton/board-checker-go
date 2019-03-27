@@ -16,13 +16,13 @@
             <thead>
                   <th>ID</th>
                   <th>Name</th>
-                  <th>Edit</th>
+                  <th></th>
             </thead>
             {{range .Zones}}
             <tr>
                   <td>{{.ID}}</td>
                   <td><a href="/worksheet/zone/{{.ID}}">{{.Name}}</a></td>
-                  <td><a href="/zone/{{.ID}}/edit">Edit</a></td>
+                  <td><a href="/zone/{{.ID}}/edit" class="btn btn-info">Edit</a></td>
             </tr>
             {{end}}
       </table>

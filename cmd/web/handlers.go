@@ -140,6 +140,7 @@ func (app *App) IndexTeam(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.RenderHTML(w, r, []string{"team.index.page.html"}, &HTMLData{
+		Title: "Team",
 		Flash: flash,
 		Teams: teams,
 	})
@@ -250,6 +251,39 @@ func (app *App) EditTeam(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app *App) DeleteTeam(w http.ResponseWriter, r *http.Request) {
+	teamID, _ := strconv.Atoi(mux.Vars(r)["team_id"])
+
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	user := app.CurrentUser(r)
+	if user == nil {
+		app.Unauthorized(w, r)
+		return
+	}
+
+	if teamID == 0 {
+		app.NotFound(w, r)
+		return
+	}
+
+	err := db.DeleteTeam(teamID)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	session := app.Sessions.Load(r)
+	err = session.PutString(w, "flash", "Team was deleted successfully!")
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	http.Redirect(w, r, "/teams", http.StatusSeeOther)
+}
+
 func (app *App) IndexZone(w http.ResponseWriter, r *http.Request) {
 	db := &models.Database{connect(app.DSN)}
 	defer db.Close()
@@ -268,6 +302,7 @@ func (app *App) IndexZone(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.RenderHTML(w, r, []string{"zone.index.page.html"}, &HTMLData{
+		Title: "Zone",
 		Flash: flash,
 		Zones: zones,
 	})
@@ -423,6 +458,7 @@ func (app *App) IndexWorksheetByZone(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.RenderHTML(w, r, []string{"worksheet.index.page.html"}, &HTMLData{
+		Title:      "Worksheet",
 		Flash:      flash,
 		Worksheets: worksheets,
 	})

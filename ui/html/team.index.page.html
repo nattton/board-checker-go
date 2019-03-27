@@ -16,13 +16,18 @@
             <thead>
                   <th>ID</th>
                   <th>Name</th>
-                  <th>Edit</th>
+                  <th></th>
+                  <th></th>
             </thead>
             {{range .Teams}}
             <tr>
                   <td>{{.ID}}</td>
                   <td>{{.Name}}</td>
-                  <td><a href="/team/{{.ID}}/edit">Edit</a></td>
+                  <td><a href="/team/{{.ID}}/edit" class="btn btn-info">Edit</a></td>
+                  <td><form action="/team/{{.ID}}/delete" method="POST">
+                        <button class="btn btn-danger" 
+                        onclick="return confirm('Are you sure you want to delete this worksheet?');">Delete</button>
+                  </form></td>
             </tr>
             {{end}}
       </table>

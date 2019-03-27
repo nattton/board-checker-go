@@ -25,6 +25,8 @@ func (app *App) Routes() http.Handler {
 		app.RequireLogin(http.HandlerFunc(app.EditTeam))).Methods("GET")
 	router.Handle("/team/{team_id:[0-9]+}/edit",
 		app.RequireLogin(http.HandlerFunc(app.SaveTeam))).Methods("POST")
+	router.Handle("/team/{team_id:[0-9]+}/delete",
+		app.RequireLogin(http.HandlerFunc(app.DeleteTeam))).Methods("POST")
 
 	// Zone
 	router.Handle("/zones",
