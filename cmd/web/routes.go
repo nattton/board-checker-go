@@ -49,6 +49,8 @@ func (app *App) Routes() http.Handler {
 		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetByDate))).Methods("GET")
 	router.Handle("/worksheet/zone/{zone_id:[0-9]+}",
 		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetByZone))).Methods("GET")
+	router.Handle("/worksheet/search",
+		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetBySearch))).Queries("q", "{q}").Methods("GET")
 
 	worksheetRouter := router.PathPrefix("/worksheet/{worksheet_id:[0-9]+}").Subrouter()
 	worksheetRouter.Handle("",

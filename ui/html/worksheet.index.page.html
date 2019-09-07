@@ -1,4 +1,4 @@
-{{define "page-title"}}Home{{end}}
+{{define "page-title"}}{{.Title}}{{end}}
 {{define "page-body"}}
 
 <link rel="stylesheet" href="/static/node_modules/pg-calendar/dist/css/pignose.calendar.min.css" />
@@ -7,15 +7,17 @@
 
 <script>
 $(function() {
-      var currentDate = window.location.pathname.replace("/worksheet/date/", "");
-      console.log(currentDate)
-    $('.calendar').pignoseCalendar({
-          date: currentDate,
-          select: function(date, context) {
-            var selectDate = date[0];
-            window.location = "/worksheet/date/" + selectDate.format("YYYY-MM-DD");
-          }
-    });
+      if (window.location.pathname.search("/worksheet/date/") > -1) {
+            var currentDate = window.location.pathname.replace("/worksheet/date/", "");
+            console.log(currentDate)
+            $('.calendar').pignoseCalendar({
+                  date: currentDate,
+                  select: function(date, context) {
+                        var selectDate = date[0];
+                        window.location = "/worksheet/date/" + selectDate.format("YYYY-MM-DD");
+                  }
+            });
+      }
 });
 </script>
 

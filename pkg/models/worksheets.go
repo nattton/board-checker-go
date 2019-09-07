@@ -111,6 +111,32 @@ func (db *Database) ListWorksheetsByDate(date string) (Worksheets, error) {
 	return worksheets, nil
 }
 
+func (db *Database) ListWorksheetsBySearch(q string) (Worksheets, error) {
+	stmt := `SELECT id, number, name, created FROM worksheets WHERE number LIKE ? ORDER BY created DESC`
+	rows, err := db.Query(stmt, "%"+q+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	worksheets := Worksheets{}
+	for rows.Next() {
+		p := &Worksheet{}
+		rows.Scan(&p.ID, &p.Number, &p.Name, &p.Created)
+		if err != nil {
+			return nil, err
+		}
+		worksheets = append(worksheets, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return worksheets, nil
+}
+
 func (db *Database) ListWorksheetsByZone(zoneID int) (Worksheets, error) {
 	stmt := `SELECT id, number, name, created FROM worksheets WHERE zone_id = ? ORDER BY created DESC`
 	rows, err := db.Query(stmt, zoneID)

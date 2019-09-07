@@ -464,6 +464,32 @@ func (app *App) IndexWorksheetByZone(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app *App) IndexWorksheetBySearch(w http.ResponseWriter, r *http.Request) {
+	q := r.FormValue("q")
+	log.Print(q)
+	db := &models.Database{connect(app.DSN)}
+	defer db.Close()
+
+	worksheets, err := db.ListWorksheetsBySearch(q)
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	session := app.Sessions.Load(r)
+	flash, err := session.PopString(w, "flash")
+	if err != nil {
+		app.ServerError(w, err)
+		return
+	}
+
+	app.RenderHTML(w, r, []string{"worksheet.index.page.html"}, &HTMLData{
+		Title:      "Search - " + q,
+		Flash:      flash,
+		Worksheets: worksheets,
+	})
+}
+
 func (app *App) ShowWorksheet(w http.ResponseWriter, r *http.Request) {
 	worksheetID, _ := strconv.Atoi(mux.Vars(r)["worksheet_id"])
 
