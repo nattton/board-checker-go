@@ -47,6 +47,8 @@ func (app *App) Routes() http.Handler {
 		app.RequireLogin(http.HandlerFunc(app.SaveWorksheet))).Methods("POST")
 	router.Handle("/worksheet/date/{date}",
 		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetByDate))).Methods("GET")
+	router.Handle("/worksheet/team/{team_id:[0-9]+}",
+		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetByTeam))).Methods("GET")
 	router.Handle("/worksheet/zone/{zone_id:[0-9]+}",
 		app.RequireLogin(http.HandlerFunc(app.IndexWorksheetByZone))).Methods("GET")
 	router.Handle("/worksheet/search",

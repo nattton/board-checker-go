@@ -22,7 +22,7 @@
             {{range .Teams}}
             <tr>
                   <td>{{.ID}}</td>
-                  <td>{{.Name}}</td>
+                  <td><a href="/worksheet/team/{{.ID}}">{{.Name}}</a></td>
                   <td><a href="/team/{{.ID}}/edit" class="btn btn-info">Edit</a></td>
                   <td><form action="/team/{{.ID}}/delete" method="POST">
                         <button class="btn btn-danger" 
