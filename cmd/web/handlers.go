@@ -877,7 +877,7 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) CreateQR(w http.ResponseWriter, r *http.Request) {
-	data := r.FormValue("data")
+	data := mux.Vars(r)["data"]
 	var png []byte
 	png, _ = qrcode.Encode(data, qrcode.Medium, 256)
 	w.Header().Set("Content-Type", "image/png")
