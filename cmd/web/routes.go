@@ -14,6 +14,8 @@ func (app *App) Routes() http.Handler {
 	router.HandleFunc("/user/login", app.VerifyUser).Methods("POST")
 	router.Handle("/user/logout", app.RequireLogin(http.HandlerFunc(app.LogoutUser))).Methods("POST")
 
+	router.Handle("/createqr", http.HandlerFunc(app.CreateQR)).Methods("GET")
+
 	// Team
 	router.Handle("/teams",
 		app.RequireLogin(http.HandlerFunc(app.IndexTeam))).Methods("GET")

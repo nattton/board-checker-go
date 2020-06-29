@@ -14,6 +14,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gitlab.com/code-mobi/board-checker/pkg/forms"
 	"gitlab.com/code-mobi/board-checker/pkg/models"
+	qrcode "github.com/skip2/go-qrcode"
 )
 
 func (app *App) Home(w http.ResponseWriter, r *http.Request) {
@@ -873,6 +874,14 @@ func (app *App) InsertPhoto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/worksheet/"+strconv.Itoa(worksheetID), http.StatusSeeOther)
+}
+
+func (app *App) CreateQR(w http.ResponseWriter, r *http.Request) {
+	data := r.FormValue("data")
+	var png []byte
+	png, _ = qrcode.Encode(data, qrcode.Medium, 256)
+	w.Header().Set("Content-Type", "image/png")
+	w.Write(png)
 }
 
 func (app *App) DownloadPhoto(w http.ResponseWriter, r *http.Request) {
